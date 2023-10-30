@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Button } from 'react-native';
 
-function Screen1(props) {
+function Screen1({navigation}) {
   return (
     <View style={styles.container}>
       <Text>Screen 1</Text>
-    </View>
+      <Button title='Setting' onPress={() => navigation.navigate('Setting')}></Button>
+    </View> 
   );
 }
 

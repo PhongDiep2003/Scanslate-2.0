@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, StyleSheet, Text, Pressable} from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
-import { Ionicons } from '@expo/vector-icons'; 
+import { Ionicons, AntDesign } from '@expo/vector-icons'; 
 import { useRef, useState, useEffect } from 'react';
-function Camera_View({image, setImage}) {
+import { colors } from '../../base';
+function Camera_View({image, setImage, navigation}) {
   const cameraRef = useRef(null);
   const [hasCameraPermission, setHasCameraPermission] = useState(null)
   
@@ -50,6 +51,12 @@ function Camera_View({image, setImage}) {
                                                             color="white" 
                                                             style={styles.takePictureButton}/>
                                                 </Pressable>
+
+                                                {/* Icon for setting */}
+                                                <Pressable style={styles.settingIconContainer}
+                                                          onPress={() => navigation.navigate('Setting')}>
+                                                      <AntDesign name="user" size={30} color="black" />
+                                                </Pressable>
                                     </Camera>
                               :
                                 <Text>Permission hasn't been granted</Text>
@@ -72,7 +79,17 @@ const styles = StyleSheet.create({
     alignItems:'center'
   },
   takePictureButton: {
-    marginBottom: 100 
-  }
+    marginBottom: 150 
+  },
+  settingIconContainer: {
+    backgroundColor: colors.bottom_tab,
+    padding: 5,
+    position: 'absolute',
+    bottom:840,
+    left:380,
+    borderRadius:'100%',
+    height:40,
+    width:40
+  },
 })
 export default Camera_View;

@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text} from 'react-native';
 
-function Screen2(props) {
+function Setting(props) {
   return (
     <View style={styles.container}>
-      <Text>Screen 2</Text>
+      <Text>Setting</Text>
     </View>
   );
 }
@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Screen2;
+export default Setting;

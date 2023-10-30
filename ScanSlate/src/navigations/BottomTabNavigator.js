@@ -1,11 +1,10 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Screen1 from '../screens/Screen1';
-import Screen2 from '../screens/Screen2';
 import Screen3 from '../screens/Screen3';
 import Camera_View from '../components/Camera_View';
 import { Feather, SimpleLineIcons, Entypo } from '@expo/vector-icons';
-import { Pressable, View } from 'react-native';
+import {View } from 'react-native';
 import { navigation_styles as styles } from './navigationStyle';
 const TabBarIconContainer = ({children, focused}) => 
                                               <View style={ focused ? [styles.TabBarIconContainer, styles.TabBarIconContainer_Active] : styles.TabBarIconContainer}>
@@ -17,6 +16,7 @@ const Tab = createBottomTabNavigator();
 function BottomTabNavigator() {
   return (
     <Tab.Navigator 
+      initialRouteName='CameraView'
       goBack={'none'}
       screenOptions= {
         {
