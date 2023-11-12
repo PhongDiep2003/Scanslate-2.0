@@ -1,74 +1,128 @@
 import React from 'react';
-import { View, StyleSheet, Text, Pressable} from 'react-native';
+import {View, StyleSheet, Pressable, Dimensions, Platform, Linking, StatusBar, TouchableOpacity} from 'react-native';
+import { Button } from 'react-native-paper';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Camera, CameraType } from 'expo-camera';
 import { Ionicons, AntDesign } from '@expo/vector-icons'; 
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { colors } from '../../base';
-function Camera_View({image, setImage, navigation}) {
-  const cameraRef = useRef(null);
-  const [hasCameraPermission, setHasCameraPermission] = useState(null)
-  
-  // Ask permission immediately from users for accessing camera when the page just finishes rendering 
-  useEffect(() => {
-    const askPermissions = async () => {
-      const {status} = await Camera.requestCameraPermissionsAsync();
-      setHasCameraPermission(status === 'granted');
-    }
-    askPermissions()
-  },[])
+import Toast from 'react-native-toast-message';
 
+
+
+// In order to render camera feed without distortion, 16:9 ratio
+// should be used fo iOS devices and 4:3 ratio should be used for android
+// devices.
+const IS_IOS = Platform.OS === 'ios';
+const CAM_PREVIEW_WIDTH = Dimensions.get('window').width;
+const CAM_PREVIEW_HEIGHT = CAM_PREVIEW_WIDTH / (IS_IOS ? 9 / 16 : 3 / 4);
+
+
+//a function that open the setting app in mobile device
+async function openSettings() {
+  try {
+    await Linking.openSettings();
+  } catch(error) {
+    Toast.show({
+      type: 'error',
+      text1: 'Failed to open settings'
+    })
+  }
+}
+
+
+function Camera_View({image, setImage, navigation}) {
+  // get the current insets (or padding values) needed to avoid the system UI
+  const insets = useSafeAreaInsets()
+  //declare a variable that represent the permission to accesscamera
+  const [permission, requestPermission] = Camera.useCameraPermissions()
+  const cameraRef = useRef(null);
+  //a function that will be called automatically when the page just finished loading components
+  useEffect(() => {
+    if (!permission || !permission?.granted) {
+      requestPermission()
+    }
+  },[])
+  // a function that will handle when users take the picture
   const takePicture = async () => {
-    if (cameraRef) {
-      try {
-        const data = await cameraRef.current.takePictureAsync()
-        // setImage(data.uri)
-        console.log(data.uri)
+    try {
+      if (cameraRef && cameraRef?.current) {
+        const image = await cameraRef.current.takePictureAsync()
+        //navigate to the result page, which is the page that will handle all the classification stuffs 
+        navigation.navigate('ClassifyImage', {url: image.uri})
       }
-      catch(e) {
-        console.log(e)
-      }
+    } catch(error) {
+      Toast.show({
+        type: 'error',
+        text1:'Failed to take picture'
+      })
     }
   }
 
-  // if hasCameraPermission is true => open the camera
-  // if hasCameraPermission is false => display an alert noticing the permission hasn't been granted
+  // if hasCameraPermission is true => display camera
+  // if hasCameraPermission is false => display a separated UI that requires user to grant camera permission
   return (
-    //container
-    <View style={styles.container}>
-        {
-          hasCameraPermission ? 
-                                  //Camera
-                                  <Camera 
-                                        type={CameraType.back} 
-                                        ref={cameraRef}
-                                        style={styles.camera}>
-                                                {/* Take picture button */}
-                                                <Pressable
-                                                  onPress={takePicture}> 
-                                                  <Ionicons 
-                                                            name="radio-button-on-outline" 
-                                                            size={100} 
-                                                            color="white" 
-                                                            style={styles.takePictureButton}/>
-                                                </Pressable>
+          permission && permission.granted ? 
+                                <View style={[styles.container, { 
+                                                                      paddingTop: insets.top,
+                                                                      paddingBottom: insets.bottom,
+                                                                      paddingLeft: insets.left,
+                                                                      paddingRight: insets.right
+                                                                 }]}>
+                                        <StatusBar barStyle="light-content" animated />
+                                        <Camera 
+                                              type= {CameraType.back}
+                                              ref={cameraRef}
+                                              style={styles.camera}>
+                                                      <View style={styles.buttonsView}>
+                                                          {/* Take picture button */}
+                                                          <TouchableOpacity
+                                                            onPress={takePicture}> 
+                                                            <Ionicons 
+                                                                      name="radio-button-on-outline" 
+                                                                      size={100} 
+                                                                      color="white" 
+                                                                      style={styles.takePictureButton}/>
+                                                          </TouchableOpacity>
 
-                                                {/* Icon for setting */}
-                                                <Pressable style={styles.settingIconContainer}
-                                                          onPress={() => navigation.navigate('Setting')}>
-                                                      <AntDesign name="user" size={30} color="black" />
-                                                </Pressable>
-                                    </Camera>
+                                                          {/* Icon for setting */}
+                                                          <Pressable style={styles.settingIconContainer}
+                                                                    onPress={() => navigation.navigate('Setting')}>
+                                                                <AntDesign name="user" size={30} color="black" />
+                                                          </Pressable>
+                                                      </View>
+                                          </Camera>
+                                  </View>
                               :
-                                <Text>Permission hasn't been granted</Text>
-        }
+                              <View style={[styles.container, { 
+                                                                  paddingTop: insets.top,
+                                                                  paddingBottom: insets.bottom,
+                                                                  paddingLeft: insets.left,
+                                                                  paddingRight: insets.right,
+                                                                  backgroundColor:colors.primary
+                                                                }]}>
+                                          <StatusBar barStyle="light-content" animated />
+                                          <Button
+                                                  mode="contained" 
+                                                  onPress={() => openSettings()}
+                                                  buttonColor={colors.bottom_tab}
+                                                  textColor='black'
+                                                  >
+                                                      Enable Camera Permission
+                                                  </Button>
+                              </View>
+          
 
-    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    position:'relative',
+    width: CAM_PREVIEW_WIDTH,
+    height: CAM_PREVIEW_HEIGHT,
+    backgroundColor: 'black'
   },
   camera: {
     flex:1, 
@@ -79,17 +133,22 @@ const styles = StyleSheet.create({
     alignItems:'center'
   },
   takePictureButton: {
-    marginBottom: 150 
+    
   },
   settingIconContainer: {
     backgroundColor: colors.bottom_tab,
     padding: 5,
-    position: 'absolute',
-    bottom:840,
-    left:380,
     borderRadius:'100%',
-    height:40,
-    width:40
+    position:'absolute',
+    left: 300
   },
+  buttonsView: {
+    flexDirection:'row', 
+    justifyContent:'center', 
+    alignItems:'center', 
+    width:'100%', 
+    marginBottom: 100, 
+    position:'relative'
+  }
 })
 export default Camera_View;
