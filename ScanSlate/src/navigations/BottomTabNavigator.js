@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Screen1 from '../screens/Screen1';
+import ViewFlashCards from '../screens/ViewFlashCards';
 import Screen3 from '../screens/Screen3';
 import Camera_View from '../components/Camera_View';
 import { Feather, SimpleLineIcons, Entypo } from '@expo/vector-icons';
@@ -27,7 +27,7 @@ function BottomTabNavigator() {
         }
         
       }>
-      <Tab.Screen name="Screen_1" component={Screen1} options={{
+      <Tab.Screen name="Screen_1" component={ViewFlashCards} options={{
         tabBarIcon : ({focused}) => <TabBarIconContainer focused={focused}>
                                       <Entypo name="text-document" size={60} color="black" />
                                     </TabBarIconContainer>

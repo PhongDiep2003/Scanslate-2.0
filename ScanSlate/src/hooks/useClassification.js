@@ -38,7 +38,7 @@ const useClassification = (url) => {
           setIsLoading(true)
           const imageClassifyModel = await prepare()
           const prediction = await classifyImage(url, imageClassifyModel)
-          setResult(prediction)
+          setResult(prediction[0]?.className.split(', ')[0].trim())
         } catch(error) {
           console.log(error)
         } finally {

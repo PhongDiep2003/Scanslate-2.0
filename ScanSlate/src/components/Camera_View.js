@@ -84,13 +84,12 @@ function Camera_View({image, setImage, navigation}) {
                                                                       color="white" 
                                                                       style={styles.takePictureButton}/>
                                                           </TouchableOpacity>
-
-                                                          {/* Icon for setting */}
-                                                          <Pressable style={styles.settingIconContainer}
+                                                      </View>
+                                                      {/* Icon for setting */}
+                                                      <Pressable style={styles.settingIconContainer}
                                                                     onPress={() => navigation.navigate('Setting')}>
                                                                 <AntDesign name="user" size={30} color="black" />
-                                                          </Pressable>
-                                                      </View>
+                                                      </Pressable>
                                           </Camera>
                                   </View>
                               :
@@ -140,7 +139,8 @@ const styles = StyleSheet.create({
     padding: 5,
     borderRadius:'100%',
     position:'absolute',
-    left: 300
+    right: 0,
+    top:0
   },
   buttonsView: {
     flexDirection:'row', 

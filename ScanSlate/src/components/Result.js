@@ -1,14 +1,49 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, StatusBar, Image, Text} from 'react-native';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, Button } from 'react-native-paper';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import useClassification from '../hooks/useClassification';
 import { colors } from '../../base';
-// import ActivityIndicator from './ActivityIndicator';
+import Modal from './Modal';
 function Result({route, navigation}) {
   const insets = useSafeAreaInsets()
   const {url} = route.params
-  const {isLoading, isTfReady, result} = useClassification(url)
+  const {isLoading, result} = useClassification(url)
+  const [modalForDuplicateResult, setModalForDuplicateResult] = useState(false)
+  const modalForDuplicateResultOkBtn = async () => {
+    /* 
+      Code to replace image GOES HERE...
+    */
+    setModalForDuplicateResult(false)
+  }
+  const modalForDuplicateResultCancelBtn = async () => setModalForDuplicateResult(false)
+  const createFlashCard = async () => {
+    /* 
+      Code to create new flashcard GOES HERE...
+      display a popup to indicate the flashcard is created successfully 
+    */
+  }
+  const checkResultExisting = async () => {
+    if (result) {
+      /* 
+        Code to send result to backend for checking its existence GOES HERE...
+      */
+      // setModalForDuplicateResult(true)
+      console.log(result)
+      console.log(url)
+    }
+  }
+  const navigateToHomePage = () => {
+    navigation.navigate('BottomTabView')
+  }
+  useEffect(() => {
+    /*
+       After the model generated the result, send the result to the backend to check for its existence
+       if response is true, display a popup to ask if users want to update image
+       else create flashcard obj and send it to backend
+    */
+    checkResultExisting()
+  },[result])
   
   if (!url) {
     navigation.pop(1);
@@ -29,8 +64,15 @@ function Result({route, navigation}) {
                       <StatusBar barStyle="light-content" animated />
                       {url && <Image source={{uri: url}} style={styles.image} resizeMode='cover'/>}
                       <View style={styles.predictionView}>
-                        <Text style={styles.predictedResult}>{result[0]?.className}</Text>
+                        <Text style={styles.predictedResult}>{result}</Text>
                       </View>
+                      <Button mode='contained' onPress={navigateToHomePage} buttonColor={'black'} textColor={colors.active_tab} labelStyle={styles.finish}>Finish</Button>
+                      <Modal 
+                              visible={modalForDuplicateResult} 
+                              title={`"${result}" is already in your deck`}
+                              content={`Click "Ok" to replace image or "No" to shut down the modal`}
+                              ok={modalForDuplicateResultOkBtn}
+                              cancel={modalForDuplicateResultCancelBtn}/>
                 </View>
     
   );
@@ -62,6 +104,10 @@ const styles = StyleSheet.create({
   predictedResult: {
     fontSize: 20, 
     color: colors.active_tab
+  },
+  finish: {
+    fontSize: 15, 
+    fontWeight:1
   }
 });
 
