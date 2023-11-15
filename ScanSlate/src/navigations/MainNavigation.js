@@ -4,6 +4,7 @@ import Signup from "../screens/Signup";
 import Setting from "../screens/Setting";
 import BottomTabNavigator from "./BottomTabNavigator";
 import Result from "../components/Result";
+import Quiz from "../screens/Quiz";
 const Stack = createStackNavigator();
 const MainNavigation = () => {
   return (
@@ -13,6 +14,7 @@ const MainNavigation = () => {
       <Stack.Screen name="Setting" component={Setting}/>
       <Stack.Screen name="BottomTabView" component={BottomTabNavigator} options={{headerShown:false}}/>
       <Stack.Screen name="ClassifyImage" component={Result} options={{headerShown:false}} />
+      <Stack.Screen name="Quiz Page" component={Quiz} options={{headerShown:false}} />
     </Stack.Navigator> 
   )
 }

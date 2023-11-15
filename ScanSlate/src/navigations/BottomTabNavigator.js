@@ -1,11 +1,11 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ViewFlashCards from '../screens/ViewFlashCards';
-import Screen3 from '../screens/Screen3';
 import Camera_View from '../components/Camera_View';
 import { Feather, SimpleLineIcons, Entypo } from '@expo/vector-icons';
 import {View } from 'react-native';
 import { navigation_styles as styles } from './navigationStyle';
+import QuizEntry from '../screens/QuizEntry';
 const TabBarIconContainer = ({children, focused}) => 
                                               <View style={ focused ? [styles.TabBarIconContainer, styles.TabBarIconContainer_Active] : styles.TabBarIconContainer}>
                                                 {children}
@@ -40,7 +40,7 @@ function BottomTabNavigator() {
         tabBarVisible: false
         
       }}/>
-      <Tab.Screen name="Screen_3" component={Screen3} options={{
+      <Tab.Screen name="Quiz Entry" component={QuizEntry} options={{
         tabBarIcon : ({focused}) => <TabBarIconContainer focused={focused}>
                                        <SimpleLineIcons name="pencil" size={50} color="black" />
                                     </TabBarIconContainer>

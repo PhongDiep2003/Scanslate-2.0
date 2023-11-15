@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   cardImage: {
     width: '100%',
     height: '70%', // Adjust the height as needed
-    borderRadius:20
+    
   },
   cardTextContainer: {
     padding: 20,
