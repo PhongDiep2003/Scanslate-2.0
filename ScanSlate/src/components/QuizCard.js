@@ -18,8 +18,7 @@ const QuizCard = ({ imageUrl, onSubmit }) => {
         onChangeText={setAnswer}
         value={answer}
         numberOfLines={1}
-        autoComplete={false}
-        autoCapitalize={false}
+        autoCapitalize='none'
         clearButtonMode='always'
         maxLength={50}
       />

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { SafeAreaView, StyleSheet, Image, Pressable, View, ScrollView} from 'react-native';
+import { SafeAreaView, StyleSheet, Image, Pressable, View, ScrollView, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
 import Logo from '../../images/ScanSlateLogo.png'
 import { Text, TextInput, Button, List } from 'react-native-paper';
 import { colors } from '../../base';
@@ -14,102 +14,116 @@ function Signup({navigation}) {
   const [selectedLanguage, setSelectedLanguage] = useState('Select your language')
   const handleExpandingList = () => setExpanded(!expanded);
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Logo */}
-      <Image source={Logo} style={styles.logo} resizeMode={'contain'}></Image>
-      
-      {/* App's name */}
-      <Text variant="displayLarge" style={styles.appName}>ScanSlate</Text>
+    <Pressable 
+                onPress={Keyboard.dismiss}
+                style={{flex:1}}>
+        
+        <SafeAreaView style={styles.container}>
+            <KeyboardAvoidingView 
+                                  behavior={Platform.OS === 'ios' ? 'position' : 'height'} 
+                                  contentContainerStyle={ Platform.OS === 'ios' ? styles.keyboardAvoidingView : null}
+                                  style={Platform.OS === 'android' ? styles.keyboardAvoidingView : null} 
+                                  keyboardVerticalOffset={-200}>
+                  {/* Logo */}
+                  <Image source={Logo} style={styles.logo} resizeMode={'contain'}></Image>
+                  
+                  {/* App's name */}
+                  <Text variant="displayLarge" style={styles.appName}>ScanSlate</Text>
 
-      {/* App's slogan */}
-      <Text variant="titleSmall" style={styles.appSlogan}>SCAN NOW, LEARN LATER</Text>
+                  {/* App's slogan */}
+                  <Text variant="titleSmall" style={styles.appSlogan}>SCAN NOW, LEARN LATER</Text>
 
-       {/* Username Input */}
-       <TextInput
-      placeholder='Enter your username'
-      clearButtonMode='always'
-      value={userName}
-      onChangeText={newText => setUserName(newText)}
-      style={styles.textInput}
-      />
+                  {/* Username Input */}
+                  <TextInput
+                  placeholder='Enter your username'
+                  clearButtonMode='always'
+                  value={userName}
+                  onChangeText={newText => setUserName(newText)}
+                  style={styles.textInput}
+                  />
 
-      {/* Passwore Input */}
-      <TextInput
-      right={<TextInput.Icon 
-                              icon="eye" 
-                              onPress={() => setPasswordVisibility1(prev => !prev)}
-                              style={styles.visibilityIcon}
-                              />}
-      placeholder='Enter your password'
-      clearButtonMode='always'
-      value={password}
-      onChangeText={newText => setPassword(newText)}
-      secureTextEntry={passwordVisibility1}
-      style={styles.textInput}
-    />
+                  {/* Passwore Input */}
+                  <TextInput
+                  right={<TextInput.Icon 
+                                          icon="eye" 
+                                          onPress={() => setPasswordVisibility1(prev => !prev)}
+                                          style={styles.visibilityIcon}
+                                          />}
+                  placeholder='Enter your password'
+                  clearButtonMode='always'
+                  value={password}
+                  onChangeText={newText => setPassword(newText)}
+                  secureTextEntry={passwordVisibility1}
+                  style={styles.textInput}
+                />
 
-    {/* Confirm Password Input */}
-    <TextInput
-      right={<TextInput.Icon 
-                              icon="eye" 
-                              onPress={() => setPasswordVisibility2(prev => !prev)}
-                              style={styles.visibilityIcon}
-                              />}
-      placeholder='Confirm your password'
-      clearButtonMode='always'
-      value={confirmPassword}
-      onChangeText={newText => setConfirmPassword(newText)}
-      secureTextEntry={passwordVisibility2}
-      style={styles.textInput}
-    />
+                {/* Confirm Password Input */}
+                <TextInput
+                  right={<TextInput.Icon 
+                                          icon="eye" 
+                                          onPress={() => setPasswordVisibility2(prev => !prev)}
+                                          style={styles.visibilityIcon}
+                                          />}
+                  placeholder='Confirm your password'
+                  clearButtonMode='always'
+                  value={confirmPassword}
+                  onChangeText={newText => setConfirmPassword(newText)}
+                  secureTextEntry={passwordVisibility2}
+                  style={styles.textInput}
+                />
 
-    {/* Expandable Language List  */}
-    <View style={styles.languagesListContainer}>
-      <List.Accordion
-        title={selectedLanguage}
-        style={styles.languagesList}
-        expanded={expanded}
-        onPress={handleExpandingList}
-        >
-        <ScrollView style={styles.scrollViewForLanguagesList}>
-          {supportedLanguages.map((language, i) => 
-                                                    <List.Item 
-                                                               title ={language.language} 
-                                                               onPress={
-                                                                    () => {
-                                                                      setSelectedLanguage(language.value)
-                                                                      handleExpandingList()
-                                                                    }
-                                                                  }
-                                                                key={i.toString()}
-                                                               />)}
-        </ScrollView>
-      </List.Accordion>
-    </View>
-    {/* Signup Button */}
-    <Button 
-            mode="contained" 
-            onPress={() => navigation.navigate('Log in')}
-            buttonColor={colors.bottom_tab}
-            style={styles.loginButton}
-            textColor='black'
-            labelStyle={styles.loginButtonText}
-            >
-        Sign up
-    </Button>
-    </SafeAreaView>
+                {/* Expandable Language List  */}
+                <View style={styles.languagesListContainer}>
+                  <List.Accordion
+                    title={selectedLanguage}
+                    style={styles.languagesList}
+                    expanded={expanded}
+                    onPress={handleExpandingList}
+                    >
+                    <ScrollView style={styles.scrollViewForLanguagesList}>
+                      {supportedLanguages.map((language, i) => 
+                                                                <List.Item 
+                                                                          title ={language.language} 
+                                                                          onPress={
+                                                                                () => {
+                                                                                  setSelectedLanguage(language.value)
+                                                                                  handleExpandingList()
+                                                                                }
+                                                                              }
+                                                                            key={i.toString()}
+                                                                          />)}
+                    </ScrollView>
+                  </List.Accordion>
+                </View>
+                {/* Signup Button */}
+                <Button 
+                        mode="contained" 
+                        onPress={() => navigation.navigate('Log in')}
+                        buttonColor={colors.bottom_tab}
+                        style={styles.loginButton}
+                        textColor='black'
+                        labelStyle={styles.loginButtonText}
+                        >
+                    Sign up
+                </Button>
+            </KeyboardAvoidingView>
+        </SafeAreaView>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    
     flex: 1,
-    alignItems:'center',
     backgroundColor: colors.primary
   },
+  keyboardAvoidingView: {
+    width:'100%', 
+    height:'100%', 
+    alignItems:'center',
+  },
   logo: {
-   width:'50%',
+   width: 150,
    height: 150,
    marginTop:40
   },
@@ -161,7 +175,7 @@ const styles = StyleSheet.create({
   loginButtonText: {
     color:'black',
     fontWeight:'bold',
-    fontSize: '20%' 
+    fontSize: 20 
   }
 
 
