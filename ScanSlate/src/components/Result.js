@@ -43,7 +43,7 @@ function Result({route, navigation}) {
        else create flashcard obj and send it to backend
     */
     checkResultExisting()
-  },[result])
+  },[])
   
   if (!url) {
     navigation.pop(1);

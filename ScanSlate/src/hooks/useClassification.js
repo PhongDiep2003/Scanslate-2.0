@@ -3,7 +3,7 @@ import * as FileSystem from 'expo-file-system'
 import {useState, useEffect} from 'react';
 import * as tf from '@tensorflow/tfjs';
 import * as mobilenet from '@tensorflow-models/mobilenet';
-
+import getTranslation from './utilities/getTranslation';
 const useClassification = (url) => {
   const [isTfReady, setIsTfReady] = useState(false)
   const [result, setResult] = useState('')
@@ -38,7 +38,11 @@ const useClassification = (url) => {
           setIsLoading(true)
           const imageClassifyModel = await prepare()
           const prediction = await classifyImage(url, imageClassifyModel)
-          setResult(prediction[0]?.className.split(', ')[0].trim())
+          if (prediction) {
+            const translatedWord = await getTranslation(prediction[0]?.className.split(', ')[0].trim(), 'vi')
+            setResult(translatedWord)
+          }
+          // setResult(prediction[0]?.className.split(', ')[0].trim())
         } catch(error) {
           console.log(error)
         } finally {
