@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { initializeAuth, getReactNativePersistence} from "firebase/auth";
+import { initializeAuth, getReactNativePersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
 import {getDatabase, ref, get, set, push, query, orderByChild, equalTo, update, remove} from  "firebase/database"
 
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,7 +11,7 @@ import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBDeNWU7kd7WaN2dSZfIZcrMKXHHSeZbuE",
+  apiKey: "Contact me for firebase api key",
   authDomain: "scanslate-c1d3c.firebaseapp.com",
   projectId: "scanslate-c1d3c",
   storageBucket: "scanslate-c1d3c.appspot.com",
@@ -28,4 +28,4 @@ const auth = initializeAuth(firebase, {
 
 const db = getDatabase()
 
-export {firebase, auth, db, ref, get, set, push, query , orderByChild, equalTo, update, remove}
+export {firebase, auth, db, ref, get, set, push, query , orderByChild, equalTo, update, remove, createUserWithEmailAndPassword, signInWithEmailAndPassword}
