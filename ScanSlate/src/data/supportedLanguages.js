@@ -1,10 +1,10 @@
 export default supportedLanguages = [
-  {'language': 'Afrikaans', 'value': 'Afrikaans'},
-  {'language': 'Albanian', 'value': 'Albanian'},
-  {'language': 'Amharic', 'value': 'Amharic'},
-  {'language': 'Arabic', 'value': 'Arabic'},
-  {'language': 'Armenian', 'value': 'Armenian'},
-  {'language': 'Assamese', 'value': 'Assamese'},
+  {'language': 'Afrikaans', 'value': 'af'},
+  {'language': 'Albanian', 'value': 'sq'},
+  {'language': 'Amharic', 'value': 'am'},
+  {'language': 'Arabic', 'value': 'ar'},
+  {'language': 'Armenian', 'value': 'hy'},
+  {'language': 'Assamese', 'value': 'as'},
   {'language': 'Aymara', 'value': 'Aymara'},
   {'language': 'Azerbaijani', 'value': 'Azerbaijani'},
   {'language': 'Bambara', 'value': 'Bambara'},
@@ -16,8 +16,7 @@ export default supportedLanguages = [
   {'language': 'Bulgarian', 'value': 'Bulgarian'},
   {'language': 'Catalan', 'value': 'Catalan'},
   {'language': 'Cebuano', 'value': 'Cebuano'},
-  {'language': 'Chinese (Simplified)', 'value': 'Chinese (Simplified)'},
-  {'language': 'Chinese (Traditional)', 'value': 'Chinese (Traditional)'},
+  {'language': 'Chinese', 'value': 'zh'},
   {'language': 'Corsican', 'value': 'Corsican'},
   {'language': 'Croatian', 'value': 'Croatian'},
   {'language': 'Czech', 'value': 'Czech'},
@@ -50,5 +49,6 @@ export default supportedLanguages = [
   {'language': 'Igbo', 'value': 'Igbo'},
   {'language': 'Ilocano', 'value': 'Ilocano'},
   {'language': 'Indonesian', 'value': 'Indonesian'},
+  {'language': 'Vietnamese', 'value': 'vi'},
   
 ]

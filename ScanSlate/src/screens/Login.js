@@ -1,12 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, Image, Pressable, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
 import Logo from '../../images/ScanSlateLogo.png'
 import { Text, TextInput, Button } from 'react-native-paper';
 import { colors } from '../../base';
+import { auth } from '../../backend/firebase';
+import {onAuthStateChanged, signInWithEmailAndPassword} from 'firebase/auth'
+
 function Login({navigation}) {
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [passwordVisibility, setPasswordVisibility] = useState(true)
+
+  const handleLogin = async () => {
+    try {
+      if (userName.length === 0 || password.length === 0) {
+        alert('Username or password may not be filled')
+        return
+      } 
+      const user = await signInWithEmailAndPassword(auth, userName, password)
+      setUserName('')
+      setPassword('')
+      setPasswordVisibility(true)
+      alert('Log in successfully')
+      navigation.navigate('BottomTabView')
+    } catch(error) {
+      if (error.code === 'auth/invalid-login-credentials') {
+        alert('Invalid username or password')
+      }
+      else {
+        console.log(error)
+      }
+    }
+  }
+
+  useEffect(() => {
+    // check if user is already signed in or not, direct user to the bottom tab screen right away they did, otherwise make them stay in login 
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, navigate to the main app
+        navigation.navigate('BottomTabView')
+      }
+    });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
   return (
     <Pressable onPress={Keyboard.dismiss} style={{flex: 1}}>
       <SafeAreaView style={styles.container}>
@@ -40,7 +78,7 @@ function Login({navigation}) {
                                 onPress={() => setPasswordVisibility(prev => !prev)}
                                 style={styles.visibilityIcon}
                                 />}
-        placeholder='Enter your password'
+        placeholder='Enter your email'
         clearButtonMode='always'
         value={password}
         onChangeText={newText => setPassword(newText)}
@@ -60,7 +98,7 @@ function Login({navigation}) {
       {/* Login Button */}
       <Button 
               mode="contained" 
-              onPress={() => navigation.navigate('BottomTabView')}
+              onPress={handleLogin}
               buttonColor={colors.bottom_tab}
               style={styles.loginButton}
               textColor='black'

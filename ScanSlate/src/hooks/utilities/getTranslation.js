@@ -19,7 +19,6 @@ export default getTranslation = async (word, translatedLanguage) => {
         de: 'a@b.c'
       },
     });
-    console.log(response.data.matches[0].translation);
     return response.data.matches[0].translation
   } catch (error) {
     console.error(error);

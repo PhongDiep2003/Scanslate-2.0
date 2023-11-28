@@ -1,34 +1,58 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, StyleSheet, Text, Pressable, TouchableOpacity, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AntDesign } from '@expo/vector-icons'; 
 import { colors } from '../../base';
 import QuizCard from '../components/QuizCard';
+import { db, get, auth, ref } from '../../backend/firebase';
 function Quiz({navigation}) {
-  const handleSubmit = () => {
-    /*Code for handling submission GOES HERE... */
-    console.log('answer is submitted')
+  const [flashcards, setFlashcards] = useState([])
+  const [index, setIndex] = useState(0)
+  const insets = useSafeAreaInsets()
+
+  const retrieveFlashcards = async () => {
+    try {
+      const flashcardsRef = ref(db, 'users/' + auth.currentUser.uid + '/flashcards');
+      const flashcards = await get(flashcardsRef)
+      const flashcardArr = []
+      if (flashcards.exists()) {
+        flashcards.forEach((child) => {
+          const key = child.key
+          const {imageUrl, translatedWord} = child.val()
+          const flashcardObject = {
+            id: key,
+            title: translatedWord,
+            imageUrl
+          }
+          flashcardArr.push(flashcardObject)
+        })
+        setFlashcards(flashcardArr)
+      }
+    } catch(error) {
+      console.log(error)
+    }
   }
+
+  useEffect(() => {
+    retrieveFlashcards()
+  }, [navigation])
+
+  const handleSubmit = (answer) => {
+    /*Code for handling submission GOES HERE... */
+    if (answer === flashcards[index]?.title) {
+      return true
+    }
+    return false
+  }
+
   const backButton = () => {
     if (index > 0) setIndex(prev => prev - 1)
   }
+
   const forwardButton = () => {
-    if (index < data.length - 1) setIndex(prev => prev + 1)
+    if (index < flashcards.length - 1) setIndex(prev => prev + 1)
   }
-  /*Fake data */
-  const data = [
-    {
-      imageUrl: 'file:///var/mobile/Containers/Data/Application/7DA7B9D1-635B-4D08-9C7E-6F8D3D990D0B/Library/Caches/ExponentExperienceData/%2540anonymous%252FScanSlate-4591f8de-6b03-4a48-8022-c9c819e2e138/Camera/A9EC2DAD-3FC8-414C-A928-62B872FC0DEB.jpg'
-    },
-    {
-      imageUrl: 'file:///var/mobile/Containers/Data/Application/7DA7B9D1-635B-4D08-9C7E-6F8D3D990D0B/Library/Caches/ExponentExperienceData/%2540anonymous%252FScanSlate-4591f8de-6b03-4a48-8022-c9c819e2e138/Camera/2D359EDA-05FB-4807-B1A2-D08117B95306.jpg'
-    },
-    {
-      imageUrl: 'file:///var/mobile/Containers/Data/Application/7DA7B9D1-635B-4D08-9C7E-6F8D3D990D0B/Library/Caches/ExponentExperienceData/%2540anonymous%252FScanSlate-4591f8de-6b03-4a48-8022-c9c819e2e138/Camera/051CF4B1-00B2-4EC4-AC88-FB8576A53C3A.jpg'
-    }
-  ]
-  const [index, setIndex] = useState(0)
-  const insets = useSafeAreaInsets()
+  
   return (
     <Pressable 
                 onPress={Keyboard.dismiss}
@@ -56,9 +80,12 @@ function Quiz({navigation}) {
               </Pressable>
           </View>
           {/* if there is no flashcards, display "Your deck is empty", otherwise display quiz cards*/}
-          {data.length == 0 
+          {flashcards.length == 0 
                             ? 
-                              <Text style={styles.notFoundText}>Your deck is empty</Text> 
+                              <View style={{justifyContent:'center', alignItems:'center', flex: 1}}> 
+                                <Text style={styles.notFoundText}>Your deck is empty</Text> 
+                              </View>
+                              
                             :
                               <>
                                 {/* Quiz Card */}
@@ -68,8 +95,9 @@ function Quiz({navigation}) {
                                                       style={Platform.OS === 'android' ? styles.keyboardAvoidingView : null} 
                                                       keyboardVerticalOffset={-100}>
                                   <QuizCard 
-                                            imageUrl={data[index]?.imageUrl}
-                                            onSubmit={handleSubmit} />
+                                            imageUrl={flashcards[index]?.imageUrl}
+                                            onSubmit={handleSubmit}
+                                             />
                                 </KeyboardAvoidingView>
                                 {/* Back Button */}
                                 <TouchableOpacity style={[styles.navigateButton, {bottom:0,

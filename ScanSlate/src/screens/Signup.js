@@ -4,6 +4,10 @@ import Logo from '../../images/ScanSlateLogo.png'
 import { Text, TextInput, Button, List } from 'react-native-paper';
 import { colors } from '../../base';
 import supportedLanguages from '../data/supportedLanguages';
+import { auth } from '../../backend/firebase';
+import {createUserWithEmailAndPassword} from 'firebase/auth'
+import {getDatabase, ref, set} from 'firebase/database'
+
 function Signup({navigation}) {
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
@@ -13,6 +17,51 @@ function Signup({navigation}) {
   const [expanded, setExpanded] = React.useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('Select your language')
   const handleExpandingList = () => setExpanded(!expanded);
+
+  const addUserToDatabase = async(userId) => {
+    try {
+      const db = getDatabase();
+      set(ref(db, 'users/' + userId), {
+      language: selectedLanguage,
+      });
+    } catch(error) {
+      console.log(error)
+    }
+  }
+  // ultilize firebase authentication to perform login and sign up
+  const handleSignup = async () => {
+    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    try {
+      if (confirmPassword !== password) {
+        alert('Confirm password does not match with password')
+        return
+      } else if (userName.length < 6 || password.length < 6) {
+        alert('Username and password mush have a minimum length of 6')
+        return
+      } else if (!regex.test(userName)) {
+        alert('Username is not a valid email')
+        return
+      }
+      // create new user
+      const userCredential = await createUserWithEmailAndPassword(auth, userName, password)
+      console.log(userCredential.user.uid)
+      addUserToDatabase(userCredential.user.uid)
+      alert('New user is created successfully')
+      setUserName('')
+      setPassword('')
+      setConfirmPassword('')
+      setSelectedLanguage('Select your language')
+      navigation.navigate('Log in')
+
+    }catch(error) {
+      if (error.code === 'auth/email-already-in-use') {
+        alert('This email address is already in use');
+      } 
+      else {
+        console.error('Error creating user: ', error);
+      }
+    }
+  }
   return (
     <Pressable 
                 onPress={Keyboard.dismiss}
@@ -35,8 +84,9 @@ function Signup({navigation}) {
 
                   {/* Username Input */}
                   <TextInput
-                  placeholder='Enter your username'
+                  placeholder='Enter your email'
                   clearButtonMode='always'
+                  keyboardType='email-address'
                   value={userName}
                   onChangeText={newText => setUserName(newText)}
                   style={styles.textInput}
@@ -98,7 +148,7 @@ function Signup({navigation}) {
                 {/* Signup Button */}
                 <Button 
                         mode="contained" 
-                        onPress={() => navigation.navigate('Log in')}
+                        onPress={handleSignup}
                         buttonColor={colors.bottom_tab}
                         style={styles.loginButton}
                         textColor='black'
