@@ -14,7 +14,7 @@ function Login({navigation}) {
   const handleLogin = async () => {
     try {
       if (userName.length === 0 || password.length === 0) {
-        alert('Username or password may not be filled')
+        alert('Username or password is empty')
         return
       } 
       const user = await signInWithEmailAndPassword(auth, userName, password)
@@ -24,7 +24,8 @@ function Login({navigation}) {
       alert('Log in successfully')
       navigation.navigate('BottomTabView')
     } catch(error) {
-      if (error.code === 'auth/invalid-login-credentials') {
+      if (error.code === 'auth/invalid-login-credentials' 
+        || error.code === 'auth/invalid-credential') {
         alert('Invalid username or password')
       }
       else {

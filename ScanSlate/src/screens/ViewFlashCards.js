@@ -57,45 +57,37 @@ const ViewFlashCards = ({navigation}) => {
     retrieveFlashcards()
   },[navigation])
   return (
-      // (flashcards.length != 0 ?
-                            <View style={[styles.container, {
-                              paddingTop: insets.top,
-                              paddingBottom: insets.bottom,
-                              paddingLeft: insets.left,
-                              paddingRight: insets.right,
-                            }]}>
-                                  <FlatList
-                                    data={flashcards}
-                                    renderItem={({item}) => <FlashCard {...item}
-                                                onDelete={() => deleteFlashcard(item)} /> }
-                                    pagingEnabled
-                                    keyExtractor={card => card.id }
-                                    horizontal
-                                    style={styles.scrollView}
-                                    onRefresh={retrieveFlashcards}
-                                    refreshing={refreshing}/>
-                                  {/* Icon for setting */}
-                                  <Pressable 
-                                              style={[styles.settingIconContainer, {top: insets.top, right:insets.right}]}
-                                              onPress={() => navigation.navigate('Setting')}>
-                                                    <AntDesign name="user" size={30} color="black" />
-                                  </Pressable>
-                            </View>
-                          // :
-                          //   <View style={[styles.container, {
-                          //     paddingTop: insets.top,
-                          //     paddingBottom: insets.bottom,
-                          //     paddingLeft: insets.left,
-                          //     paddingRight: insets.right,
-                          //     justifyContent:'center',
-                          //     alignItems:'center',
-                          //   }]}> 
-                          //         <Text style={styles.notFoundText}>
-                          //                 No flashcards
-                          //         </Text>
+          <View style={[styles.container, {
+            paddingTop: insets.top,
+            paddingBottom: insets.bottom,
+            paddingLeft: insets.left,
+            paddingRight: insets.right,
+          }]}>
+                <FlatList
+                  data={flashcards}
+                  renderItem={({item}) => <FlashCard {...item}
+                              onDelete={() => deleteFlashcard(item)} /> }
+                  pagingEnabled
+                  keyExtractor={card => card.id }
+                  horizontal
+                  style={styles.scrollView}
+                  onRefresh={retrieveFlashcards}
+                  refreshing={refreshing}
+                  />
+                {/* Icon for setting */}
+                <Pressable 
+                            style={[styles.settingIconContainer, {top: insets.top, right:insets.right}]}
+                            onPress={() => navigation.navigate('Setting')}>
+                                  <AntDesign name="user" size={30} color="black" />
+                </Pressable>
 
-                          //   </View>
-                          );
+                {flashcards.length === 0 && 
+                <Text style={styles.notFoundText}>
+                              No flashcards
+                </Text>}
+          </View>
+      
+        );
 };
 
 const styles = StyleSheet.create({
@@ -116,6 +108,10 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: '600',
     color: '#424656',
+    position:'absolute',
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -120 }]
   }
 });
 

@@ -22,7 +22,7 @@ const QuizCard = ({id, imageUrl, onSubmit, totalQuizCount, totalScore }) => {
       const updatedValue = {
         totalQuizCount: totalQuizCount + 1,
         totalScore: totalScore + score,
-        correctPercentage: (((totalScore + score) / (totalQuizCount + 1)) * 100).toString() + '%'
+        correctPercentage: (((totalScore + score) / (totalQuizCount + 1)) * 100).toFixed(2) + '%'
       }
       update(flashcardRef, updatedValue)
 

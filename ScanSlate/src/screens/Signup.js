@@ -41,10 +41,12 @@ function Signup({navigation}) {
       } else if (!regex.test(userName)) {
         alert('Username is not a valid email')
         return
+      } else if (selectedLanguage === 'Select your language') {
+        alert('Please select your preferred language')
+        return
       }
       // create new user
       const userCredential = await createUserWithEmailAndPassword(auth, userName, password)
-      console.log(userCredential.user.uid)
       addUserToDatabase(userCredential.user.uid)
       alert('New user is created successfully')
       setUserName('')
