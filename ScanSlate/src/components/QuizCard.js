@@ -1,30 +1,64 @@
 import React, { useState } from 'react';
-import { View, Image, TextInput, Button, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, Image, TextInput, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import checkmark from '../../images/checkmarkIcon.png'
+import x from '../../images/xIcon.png'
 import { colors } from '../../base';
-const QuizCard = ({ imageUrl, onSubmit }) => {
-  const [answer, setAnswer] = useState('');
-
+import { auth, update, ref, db } from '../../backend/firebase';
+const QuizCard = ({id, imageUrl, onSubmit, totalQuizCount, totalScore }) => {
+  const [userAnswer, setUserAnswer] = useState('');
+  const [isCorrect, setIsCorrect] = useState('')
+  
   const handleSubmit = () => {
     /* Handle submission logic CODE GOES HERE*/
-    onSubmit(answer);
-    setAnswer(''); // Clear the input after submission
+    const {score, isCorrect} = onSubmit(userAnswer)
+    setIsCorrect(isCorrect)
+    updateFlashCardScore(score)
   };
+
+  const updateFlashCardScore = async (score) => {
+    try {
+      const user = auth.currentUser
+      const flashcardRef = ref(db, 'users/' + user.uid + '/flashcards/' + id)
+      const updatedValue = {
+        totalQuizCount: totalQuizCount + 1,
+        totalScore: totalScore + score,
+        correctPercentage: (((totalScore + score) / (totalQuizCount + 1)) * 100).toFixed(2) + '%'
+      }
+      update(flashcardRef, updatedValue)
+
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
 
   return (
     <View style={styles.card}>
       <Image source={{ uri: imageUrl }} style={styles.image} />
       <TextInput
         style={styles.input}
-        onChangeText={setAnswer}
-        value={answer}
+        onChangeText={setUserAnswer}
+        value={userAnswer}
         numberOfLines={1}
         autoCapitalize='none'
         clearButtonMode='always'
         maxLength={50}
       />
-     <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
-        <Text style={styles.submitText}>Submit</Text>
-     </TouchableOpacity>
+      {isCorrect === '' ?
+                          <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
+                            <Text style={styles.submitText}>Submit</Text>
+                          </TouchableOpacity>
+                        : 
+                          isCorrect === true 
+                          ? 
+                            <View style={{width:'100%'}}> 
+                              <Image source={checkmark} resizeMode='contain' style={styles.correctIcon}/>
+                            </View>
+                          :
+                            <View style={{width: '100%'}}> 
+                              <Image source={x} resizeMode='contain' style={styles.correctIcon}/>
+                            </View>
+      }
     </View>
   );
 };
@@ -87,6 +121,11 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight:'500',
     letterSpacing: 5
+  },
+  correctIcon: {
+    width:'100%',
+    height:'50%',
+    alignSelf:'center',
   }
 });
 

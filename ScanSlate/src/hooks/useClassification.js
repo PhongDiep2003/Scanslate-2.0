@@ -40,7 +40,7 @@ const useClassification = (url) => {
           const prediction = await classifyImage(url, imageClassifyModel)
           if (prediction) {
             const translatedWord = await getTranslation(prediction[0]?.className.split(', ')[0].trim(), 'vi')
-            setResult(translatedWord)
+            setResult(translatedWord.toLowerCase())
           }
           // setResult(prediction[0]?.className.split(', ')[0].trim())
         } catch(error) {

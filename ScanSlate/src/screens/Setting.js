@@ -2,11 +2,17 @@ import React from 'react';
 import { View, StyleSheet, Text, Dimensions, TouchableOpacity} from 'react-native';
 import { colors } from '../../base';
 import { AntDesign, MaterialIcons, Ionicons } from '@expo/vector-icons'; 
-
+import { auth } from '../../backend/firebase';
+import {signOut} from 'firebase/auth'
 function Setting({navigation}) {
-  const logout = () => {
-    /*Code to logout GOES HERE... */
-    console.log('Logged out')
+  const logout = async () => {
+    try {
+      await signOut(auth)
+      navigation.navigate('Log in')
+    }
+    catch (error) {
+      console.log(error)
+    }
   }
 
   return (

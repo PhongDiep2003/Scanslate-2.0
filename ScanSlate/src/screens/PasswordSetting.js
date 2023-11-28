@@ -1,19 +1,41 @@
-import React from 'react';
-import { View, StyleSheet, Dimensions, Text, TouchableOpacity } from 'react-native';
+import React, {useState} from 'react';
+import { View, StyleSheet, Dimensions, Text, TouchableOpacity, TextInput } from 'react-native';
 import { colors } from '../../base';
+import { auth } from '../../backend/firebase';
+import { updatePassword } from 'firebase/auth';
+function PasswordSetting({navigation}) {
+  const changePassword = async () => {
+    if (!newPassword) {
+      alert("You haven't entered your new password")
+      return
+    }
+    const user = auth.currentUser
+    try {
+      await updatePassword(user, newPassword)
+      alert('Password is updated successfully')
+      setNewPassword('')
+      navigation.navigate('Setting')
 
-function PasswordSetting(props) {
-  const changePassword = () => {
-    /* Code to change password GOES HERE...*/
-    console.log('password is updated')
+    } catch (error) {
+      if (error.code === 'auth/requires-recent-login') {
+        alert('Please log out and log in again to change password')
+      } else {
+        console.log(error)
+      }
+    }
   }
-  //later we will replace the currentPassword with actual password located payload in auth token 
-  const currentPassword = 'scanslate123'
+  const [newPassword, setNewPassword] = useState('')
   return (
     <View style={styles.container}>
       {/* Change Password Field */}
       <View style={styles.textField}>
-            <Text style={styles.textFieldTitle}>Change Password:  {currentPassword}</Text>
+            <TextInput style={styles.textFieldTitle}
+                      placeholder='Enter your new password'
+                      secureTextEntry
+                      clearButtonMode='always'
+                      value={newPassword}
+                      onChangeText={(text) => setNewPassword(text)}
+                      maxLength={40}/>
        </View>
        {/* Logout button */}
       <TouchableOpacity style={styles.changePasswordBtn} onPress={changePassword}>
@@ -44,7 +66,8 @@ const styles = StyleSheet.create({
   textFieldTitle: {
     alignSelf:'center', 
     marginLeft:10, 
-    fontSize:18
+    fontSize:18,
+    width:'100%'
   },
   changePasswordBtn: {
     width:'60%',

@@ -1,11 +1,12 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions, Text} from 'react-native';
 import { colors } from '../../base';
+import { auth } from '../../backend/firebase';
 
-function Profile(props) {
+function Profile() {
   // later we will replace all text in the below fields with the actual email and password from payload 
-  const email = 'scanslate@gmail.com'
-  const password = 'scanslate123'
+  const email = auth.currentUser.email
+  const password = '************' 
   return (
     <View style={styles.container}>
       {/* Email Field */}

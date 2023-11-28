@@ -4,12 +4,8 @@ import { colors } from '../../base';
 const { width, height } = Dimensions.get('window');
 import { Feather } from '@expo/vector-icons';
 
+const FlashCard = ({ id, imageUrl, title, onDelete, correctPercentage}) => {
 
-const FlashCard = ({ imageUrl, title, correctPercentage}) => {
-  const deleteFlashCard =  async () => {
-    /* Code to delete flashcard GOES HERE...*/
-    console.log(`Delete ${title}`)
-  }
   return(
     <View style={styles.card}>
       <Image
@@ -19,11 +15,11 @@ const FlashCard = ({ imageUrl, title, correctPercentage}) => {
       />
       <View style={styles.cardTextContainer}>
         <Text style={styles.cardTitle}>{title}</Text>
-        <Text style={styles.cardCorrect}>{`Correct: ${correctPercentage}`}</Text>
+        <Text style={styles.quizScore}>Quiz Score: {correctPercentage}</Text>
       </View>
 
       <Pressable style={styles.deleteIconContainer}
-                onPress={deleteFlashCard}>
+                onPress={onDelete}>
             <Feather name="trash-2" size={30} color="black" />
       </Pressable>
     </View>
@@ -74,6 +70,11 @@ const styles = StyleSheet.create({
     position:'absolute',
     top: 0,              // Align to the top of the container
     right: 0,            // Align to the right of the container
+  },
+  quizScore: {
+    fontSize: 20,
+    fontWeight: '500',
+    textAlign: 'center',
   },
 });
 

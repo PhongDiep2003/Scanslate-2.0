@@ -5,45 +5,99 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import useClassification from '../hooks/useClassification';
 import { colors } from '../../base';
 import Modal from './Modal';
+import { auth, db, ref, get, set, push, query, orderByChild, equalTo, update} from '../../backend/firebase';
 function Result({route, navigation}) {
   const insets = useSafeAreaInsets()
   const {url} = route.params
+  // const result = 'Glasses'
+  // const isLoading = false
+  const [existingFlashCard, setExistingFlashCard] = useState(null)
   const {isLoading, result} = useClassification(url)
   const [modalForDuplicateResult, setModalForDuplicateResult] = useState(false)
+  const userFlashCardRef = ref(db, 'users/' + auth.currentUser.uid + '/flashcards')
+
+  // this function is delcared here to get a global-scope property 
   const modalForDuplicateResultOkBtn = async () => {
-    /* 
-      Code to replace image GOES HERE...
-    */
-    setModalForDuplicateResult(false)
+        /* 
+          Code to replace image GOES HERE...
+        */
+        try {
+            if (existingFlashCard) {
+              existingFlashCard.forEach(async (child) => {
+                const key = child.key;
+                const itemRef = ref(db, `users/${auth.currentUser.uid}/flashcards/${key}`);
+                await update(itemRef, {imageUrl: url})
+                alert('Image is updated successfully')
+              });
+            }
+        } catch (error) {
+          console.log(error)
+        } finally {
+          setModalForDuplicateResult(false)
+        }
   }
+
   const modalForDuplicateResultCancelBtn = async () => setModalForDuplicateResult(false)
-  const createFlashCard = async () => {
-    /* 
+
+  const createFlashCard = async (flashcardObject) => {
+   try {
+     /* 
       Code to create new flashcard GOES HERE...
       display a popup to indicate the flashcard is created successfully 
     */
+      await push(userFlashCardRef, flashcardObject);
+      alert('Flashcard is created successfully')
+   } catch (error) {
+    console.log(error)
+   }
   }
-  const checkResultExisting = async () => {
-    if (result) {
-      /* 
+
+  const checkAndHandleResult = async () => {
+    try {
+        /* 
         Code to send result to backend for checking its existence GOES HERE...
       */
-      // setModalForDuplicateResult(true)
-      console.log(result)
-      console.log(url)
+      // query for the result in the database to check for its existence 
+      const queryForFlashcard = query(userFlashCardRef, orderByChild('translatedWord'), equalTo(result))
+      const existingFlashcardRef = await get(queryForFlashcard)
+      //if the result (flashcard) is already existed
+      if (!existingFlashcardRef.exists()) {
+        // if flashcard is not existed
+        const newFlashcardObject = {
+          'imageUrl': url,
+          'translatedWord': result,
+          'totalQuizCount': 0,
+          'totalScore': 0,
+          'correctPercentage': '0%'
+        }
+        createFlashCard(newFlashcardObject)
+      } else {
+        // otherwise
+        // pop up a modal to ask if a user want to replace the image of their current flashcard to a new image
+        setExistingFlashCard(existingFlashcardRef)
+        setModalForDuplicateResult(true)
+      }
+      
+    } catch(error) {
+      console.log(error)
     }
+    
   }
+
   const navigateToHomePage = () => {
     navigation.navigate('BottomTabView')
   }
+
   useEffect(() => {
     /*
        After the model generated the result, send the result to the backend to check for its existence
        if response is true, display a popup to ask if users want to update image
        else create flashcard obj and send it to backend
     */
-    checkResultExisting()
-  },[])
+    if (result) {
+      checkAndHandleResult()
+    }
+  },[result])
   
   if (!url) {
     navigation.pop(1);

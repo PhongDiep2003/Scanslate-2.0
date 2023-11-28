@@ -3,7 +3,7 @@ const options = {
   method: 'GET',
   url: 'https://translated-mymemory---translation-memory.p.rapidapi.com/get',
   headers: {
-    'X-RapidAPI-Key': 'CONTACT ME FOR API KEY',
+    'X-RapidAPI-Key': '80b8dcb7bcmshd1d71ec98c1a4f8p15e688jsn4a5be83f4daf',
     'X-RapidAPI-Host': 'translated-mymemory---translation-memory.p.rapidapi.com'
   }
 };
@@ -19,7 +19,6 @@ export default getTranslation = async (word, translatedLanguage) => {
         de: 'a@b.c'
       },
     });
-    console.log(response.data.matches[0].translation);
     return response.data.matches[0].translation
   } catch (error) {
     console.error(error);
