@@ -65,7 +65,10 @@ function Result({route, navigation}) {
         // if flashcard is not existed
         const newFlashcardObject = {
           'imageUrl': url,
-          'translatedWord': result
+          'translatedWord': result,
+          'totalQuizCount': 0,
+          'totalScore': 0,
+          'correctPercentage': '0%'
         }
         createFlashCard(newFlashcardObject)
       } else {

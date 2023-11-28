@@ -6,7 +6,7 @@ import { updatePassword } from 'firebase/auth';
 function PasswordSetting({navigation}) {
   const changePassword = async () => {
     if (!newPassword) {
-      alert('The password field has ntesot been filled')
+      alert("You haven't entered your new password")
       return
     }
     const user = auth.currentUser

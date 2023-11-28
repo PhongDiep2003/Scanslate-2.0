@@ -20,11 +20,13 @@ const ViewFlashCards = ({navigation}) => {
       // do something here
       flashcards.forEach((child) => {
         const key = child.key
-        const {imageUrl,translatedWord} = child.val()
+        const {imageUrl,translatedWord, correctPercentage} = child.val()
         const flashcardObject = {
           id: key,
           title: translatedWord,
-          imageUrl
+          imageUrl,
+          correctPercentage
+
         }
         flashcardArr.push(flashcardObject)
       })

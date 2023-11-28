@@ -3,14 +3,34 @@ import { View, Image, TextInput, StyleSheet, TouchableOpacity, Text } from 'reac
 import checkmark from '../../images/checkmarkIcon.png'
 import x from '../../images/xIcon.png'
 import { colors } from '../../base';
-const QuizCard = ({ imageUrl, onSubmit}) => {
+import { auth, update, ref, db } from '../../backend/firebase';
+const QuizCard = ({id, imageUrl, onSubmit, totalQuizCount, totalScore }) => {
   const [userAnswer, setUserAnswer] = useState('');
   const [isCorrect, setIsCorrect] = useState('')
   
   const handleSubmit = () => {
     /* Handle submission logic CODE GOES HERE*/
-    setIsCorrect(onSubmit(userAnswer));
+    const {score, isCorrect} = onSubmit(userAnswer)
+    setIsCorrect(isCorrect)
+    updateFlashCardScore(score)
   };
+
+  const updateFlashCardScore = async (score) => {
+    try {
+      const user = auth.currentUser
+      const flashcardRef = ref(db, 'users/' + user.uid + '/flashcards/' + id)
+      const updatedValue = {
+        totalQuizCount: totalQuizCount + 1,
+        totalScore: totalScore + score,
+        correctPercentage: (((totalScore + score) / (totalQuizCount + 1)) * 100).toString() + '%'
+      }
+      update(flashcardRef, updatedValue)
+
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
 
   return (
     <View style={styles.card}>

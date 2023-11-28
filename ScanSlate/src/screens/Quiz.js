@@ -18,11 +18,13 @@ function Quiz({navigation}) {
       if (flashcards.exists()) {
         flashcards.forEach((child) => {
           const key = child.key
-          const {imageUrl, translatedWord} = child.val()
+          const {imageUrl, translatedWord, totalQuizCount, totalScore} = child.val()
           const flashcardObject = {
             id: key,
             title: translatedWord,
-            imageUrl
+            imageUrl,
+            totalQuizCount,
+            totalScore
           }
           flashcardArr.push(flashcardObject)
         })
@@ -40,9 +42,15 @@ function Quiz({navigation}) {
   const handleSubmit = (answer) => {
     /*Code for handling submission GOES HERE... */
     if (answer === flashcards[index]?.title) {
-      return true
+      return {
+        isCorrect: true,
+        score: 1
+      }
     }
-    return false
+    return {
+      isCorrect: false,
+      score: 0
+    }
   }
 
   const backButton = () => {
@@ -96,6 +104,9 @@ function Quiz({navigation}) {
                                                       keyboardVerticalOffset={-100}>
                                   <QuizCard 
                                             imageUrl={flashcards[index]?.imageUrl}
+                                            id={flashcards[index]?.id}
+                                            totalQuizCount={flashcards[index]?.totalQuizCount}
+                                            totalScore={flashcards[index]?.totalScore}
                                             onSubmit={handleSubmit}
                                              />
                                 </KeyboardAvoidingView>
