@@ -19,7 +19,7 @@
     "axios": "^1.6.2",
     "expo": "~49.0.13",
     "expo-camera": "~13.4.4",
-    "expo-file-system": "^15.6.0",
+    "expo-file-system": "~15.4.5",
     "expo-gl": "~13.0.1",
     "expo-media-library": "~15.4.1",
     "expo-status-bar": "~1.6.0",

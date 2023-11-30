@@ -4,14 +4,14 @@ import checkmark from '../../images/checkmarkIcon.png'
 import x from '../../images/xIcon.png'
 import { colors } from '../../base';
 import { auth, update, ref, db } from '../../backend/firebase';
-const QuizCard = ({id, imageUrl, onSubmit, totalQuizCount, totalScore }) => {
+const QuizCard = ({id, imageUrl, onSubmit, totalQuizCount, totalScore, isCorrect, setIsCorrect }) => {
   const [userAnswer, setUserAnswer] = useState('');
-  const [isCorrect, setIsCorrect] = useState('')
   
   const handleSubmit = () => {
     /* Handle submission logic CODE GOES HERE*/
-    const {score, isCorrect} = onSubmit(userAnswer)
+    const {score, isCorrect} = onSubmit(userAnswer.trim().toLowerCase())
     setIsCorrect(isCorrect)
+    setUserAnswer('')
     updateFlashCardScore(score)
   };
 
@@ -28,6 +28,7 @@ const QuizCard = ({id, imageUrl, onSubmit, totalQuizCount, totalScore }) => {
 
     } catch (error) {
       console.log(error)
+      alert('Update flashcard score failed')
     }
 
   }

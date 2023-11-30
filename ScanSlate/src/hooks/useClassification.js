@@ -4,6 +4,7 @@ import {useState, useEffect} from 'react';
 import * as tf from '@tensorflow/tfjs';
 import * as mobilenet from '@tensorflow-models/mobilenet';
 import getTranslation from './utilities/getTranslation';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const useClassification = (url) => {
   const [isTfReady, setIsTfReady] = useState(false)
   const [result, setResult] = useState('')
@@ -39,10 +40,16 @@ const useClassification = (url) => {
           const imageClassifyModel = await prepare()
           const prediction = await classifyImage(url, imageClassifyModel)
           if (prediction) {
-            const translatedWord = await getTranslation(prediction[0]?.className.split(', ')[0].trim(), 'vi')
-            setResult(translatedWord.toLowerCase())
+            const translatedLanguage = await AsyncStorage.getItem('language')
+            console.log(translatedLanguage)
+            if (translatedLanguage === 'en') {
+              setResult(prediction[0]?.className.split(', ')[0].trim().toLowerCase())
+            }
+            else {
+              const translatedWord = await getTranslation(prediction[0]?.className.split(', ')[0].trim(), translatedLanguage)
+              setResult(translatedWord.trim().toLowerCase())
+            }
           }
-          // setResult(prediction[0]?.className.split(', ')[0].trim())
         } catch(error) {
           console.log(error)
         } finally {

@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   cardTitle: {
-    fontSize: 28,
+    fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
   },

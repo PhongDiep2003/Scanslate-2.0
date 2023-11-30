@@ -9,6 +9,7 @@ function Quiz({navigation}) {
   const [flashcards, setFlashcards] = useState([])
   const [index, setIndex] = useState(0)
   const insets = useSafeAreaInsets()
+  const [isCorrect, setIsCorrect] = useState('')
 
   const retrieveFlashcards = async () => {
     try {
@@ -54,11 +55,17 @@ function Quiz({navigation}) {
   }
 
   const backButton = () => {
-    if (index > 0) setIndex(prev => prev - 1)
+    if (index > 0) {
+      setIndex(prev => prev - 1) 
+      setIsCorrect('')
+    }
   }
 
   const forwardButton = () => {
-    if (index < flashcards.length - 1) setIndex(prev => prev + 1)
+    if (index < flashcards.length - 1) {
+      setIndex(prev => prev + 1)
+      setIsCorrect('')
+    }
   }
   
   return (
@@ -108,6 +115,8 @@ function Quiz({navigation}) {
                                             totalQuizCount={flashcards[index]?.totalQuizCount}
                                             totalScore={flashcards[index]?.totalScore}
                                             onSubmit={handleSubmit}
+                                            isCorrect={isCorrect}
+                                            setIsCorrect={setIsCorrect}
                                              />
                                 </KeyboardAvoidingView>
                                 {/* Back Button */}

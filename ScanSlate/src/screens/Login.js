@@ -3,13 +3,31 @@ import { SafeAreaView, StyleSheet, Image, Pressable, Keyboard, KeyboardAvoidingV
 import Logo from '../../images/ScanSlateLogo.png'
 import { Text, TextInput, Button } from 'react-native-paper';
 import { colors } from '../../base';
-import { auth } from '../../backend/firebase';
+import { auth , db, get, ref} from '../../backend/firebase';
 import {onAuthStateChanged, signInWithEmailAndPassword} from 'firebase/auth'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 function Login({navigation}) {
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [passwordVisibility, setPasswordVisibility] = useState(true)
+
+  const saveUserLanguageToStorage = async (userId) => {
+    try {
+      const userRef = ref(db, 'users/' + userId)
+      const user = await get(userRef)
+      user.forEach((child) => {
+        if (child.key === 'language') {
+          AsyncStorage.setItem('language', child.val())
+        }
+      })
+      
+     
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const handleLogin = async () => {
     try {
@@ -23,6 +41,7 @@ function Login({navigation}) {
       setPasswordVisibility(true)
       alert('Log in successfully')
       navigation.navigate('BottomTabView')
+      saveUserLanguageToStorage(user.user.uid)
     } catch(error) {
       if (error.code === 'auth/invalid-login-credentials' 
         || error.code === 'auth/invalid-credential') {

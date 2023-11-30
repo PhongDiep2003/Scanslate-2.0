@@ -3,7 +3,7 @@ const options = {
   method: 'GET',
   url: 'https://translated-mymemory---translation-memory.p.rapidapi.com/get',
   headers: {
-    'X-RapidAPI-Key': "Contact me for api key for translation api",
+    'X-RapidAPI-Key': "80b8dcb7bcmshd1d71ec98c1a4f8p15e688jsn4a5be83f4daf",
     'X-RapidAPI-Host': 'translated-mymemory---translation-memory.p.rapidapi.com'
   }
 };

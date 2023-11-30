@@ -35,6 +35,7 @@ const ViewFlashCards = ({navigation}) => {
 
     } catch(error) {
       console.log(error)
+      alert('Retrieve flashcards failed')
     }
     
   }
@@ -49,6 +50,7 @@ const ViewFlashCards = ({navigation}) => {
     }
     catch(error) {
       console.log(error)
+      alert('Delete flashcard failed')
     }
 
   }

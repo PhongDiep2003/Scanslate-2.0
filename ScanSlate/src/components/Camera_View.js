@@ -82,7 +82,7 @@ function Camera_View({image, setImage, navigation}) {
                                                                       name="radio-button-on-outline" 
                                                                       size={100} 
                                                                       color="white" 
-                                                                      style={styles.takePictureButton}/>
+                                                                     />
                                                           </TouchableOpacity>
                                                       </View>
                                                       {/* Icon for setting */}
@@ -130,9 +130,6 @@ const styles = StyleSheet.create({
     borderRadius:20, 
     justifyContent:'flex-end', 
     alignItems:'center'
-  },
-  takePictureButton: {
-    
   },
   settingIconContainer: {
     backgroundColor: colors.bottom_tab,

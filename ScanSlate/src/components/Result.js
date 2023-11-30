@@ -6,11 +6,10 @@ import useClassification from '../hooks/useClassification';
 import { colors } from '../../base';
 import Modal from './Modal';
 import { auth, db, ref, get, set, push, query, orderByChild, equalTo, update} from '../../backend/firebase';
+
 function Result({route, navigation}) {
   const insets = useSafeAreaInsets()
   const {url} = route.params
-  // const result = 'Glasses'
-  // const isLoading = false
   const [existingFlashCard, setExistingFlashCard] = useState(null)
   const {isLoading, result} = useClassification(url)
   const [modalForDuplicateResult, setModalForDuplicateResult] = useState(false)
@@ -32,6 +31,7 @@ function Result({route, navigation}) {
             }
         } catch (error) {
           console.log(error)
+          alert('Update image failed')
         } finally {
           setModalForDuplicateResult(false)
         }
@@ -49,6 +49,7 @@ function Result({route, navigation}) {
       alert('Flashcard is created successfully')
    } catch (error) {
     console.log(error)
+    alert('Create flashcard failed')
    }
   }
 
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
   },
   finish: {
     fontSize: 15, 
-    fontWeight:1
+    fontWeight: '700'
   }
 });
 

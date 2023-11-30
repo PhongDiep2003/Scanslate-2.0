@@ -4,10 +4,12 @@ import { colors } from '../../base';
 import { AntDesign, MaterialIcons, Ionicons } from '@expo/vector-icons'; 
 import { auth } from '../../backend/firebase';
 import {signOut} from 'firebase/auth'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 function Setting({navigation}) {
   const logout = async () => {
     try {
       await signOut(auth)
+      await AsyncStorage.removeItem('language')
       navigation.navigate('Log in')
     }
     catch (error) {
