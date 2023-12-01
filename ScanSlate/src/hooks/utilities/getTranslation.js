@@ -1,9 +1,10 @@
+import {API_TRANSLATION_KEY} from '@env'
 import axios from 'axios';
 const options = {
   method: 'GET',
   url: 'https://translated-mymemory---translation-memory.p.rapidapi.com/get',
   headers: {
-    'X-RapidAPI-Key': "80b8dcb7bcmshd1d71ec98c1a4f8p15e688jsn4a5be83f4daf",
+    'X-RapidAPI-Key': API_TRANSLATION_KEY,
     'X-RapidAPI-Host': 'translated-mymemory---translation-memory.p.rapidapi.com'
   }
 };
