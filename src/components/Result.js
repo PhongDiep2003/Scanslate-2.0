@@ -11,7 +11,7 @@ function Result({route, navigation}) {
   const insets = useSafeAreaInsets()
   const {url} = route.params
   const [existingFlashCard, setExistingFlashCard] = useState(null)
-  const {isLoading, result, label} = useClassification(url)
+  const {isLoading, label, result} = useClassification(url)
   const [modalForDuplicateResult, setModalForDuplicateResult] = useState(false)
   const userFlashCardRef = ref(db, 'users/' + auth.currentUser.uid + '/flashcards')
 
@@ -109,7 +109,7 @@ function Result({route, navigation}) {
                     <ActivityIndicator animating={true} color={colors.bottom_tab} size={'large'}  />
                 </View>
               :
-
+                
                 <View style={[styles.container, {
                                                     paddingTop: insets.top,
                                                     paddingBottom: insets.bottom,
@@ -125,7 +125,7 @@ function Result({route, navigation}) {
                       <Modal 
                               visible={modalForDuplicateResult} 
                               title={`"${result}" is already in your deck`}
-                              content={`Click "Ok" to replace image or "No" to shut down the modal`}
+                              content={`Click "Ok" to replace image or "No" to close modal`}
                               ok={modalForDuplicateResultOkBtn}
                               cancel={modalForDuplicateResultCancelBtn}/>
                 </View>
@@ -158,7 +158,10 @@ const styles = StyleSheet.create({
   },
   predictedResult: {
     fontSize: 20, 
-    color: colors.active_tab
+    color: colors.active_tab,
+    flexWrap: 'wrap',
+    flex: 1
+    
   },
   finish: {
     fontSize: 15, 
