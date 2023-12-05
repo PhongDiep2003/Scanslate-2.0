@@ -11,7 +11,7 @@ function Result({route, navigation}) {
   const insets = useSafeAreaInsets()
   const {url} = route.params
   const [existingFlashCard, setExistingFlashCard] = useState(null)
-  const {isLoading, result} = useClassification(url)
+  const {isLoading, label, result} = useClassification(url)
   const [modalForDuplicateResult, setModalForDuplicateResult] = useState(false)
   const userFlashCardRef = ref(db, 'users/' + auth.currentUser.uid + '/flashcards')
 
@@ -109,7 +109,7 @@ function Result({route, navigation}) {
                     <ActivityIndicator animating={true} color={colors.bottom_tab} size={'large'}  />
                 </View>
               :
-
+                
                 <View style={[styles.container, {
                                                     paddingTop: insets.top,
                                                     paddingBottom: insets.bottom,
@@ -119,7 +119,7 @@ function Result({route, navigation}) {
                       <StatusBar barStyle="light-content" animated />
                       {url && <Image source={{uri: url}} style={styles.image} resizeMode='cover'/>}
                       <View style={styles.predictionView}>
-                        <Text style={styles.predictedResult}>{result}</Text>
+                        <Text style={styles.predictedResult}>{label} : {result}</Text>
                       </View>
                       <Button mode='contained' onPress={navigateToHomePage} buttonColor={'black'} textColor={colors.active_tab} labelStyle={styles.finish}>Finish</Button>
                       <Modal 
@@ -158,7 +158,10 @@ const styles = StyleSheet.create({
   },
   predictedResult: {
     fontSize: 20, 
-    color: colors.active_tab
+    color: colors.active_tab,
+    flexWrap: 'wrap',
+    flex: 1
+    
   },
   finish: {
     fontSize: 15, 

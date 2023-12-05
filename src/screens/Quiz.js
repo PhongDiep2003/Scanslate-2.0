@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
   exitingIconContainer: {
     backgroundColor: '#FF0000',
     padding: 5,
-    borderRadius:'100%',
+    borderRadius:100,
   },
   navigateButton: {
     backgroundColor: colors.bottom_tab,

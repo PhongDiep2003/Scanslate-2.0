@@ -9,6 +9,7 @@ const useClassification = (url) => {
   const [isTfReady, setIsTfReady] = useState(false)
   const [result, setResult] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [label, setLabel] = useState('')
   //prepare and load model
   const prepare = async () => {
     try {
@@ -39,6 +40,7 @@ const useClassification = (url) => {
           setIsLoading(true)
           const imageClassifyModel = await prepare()
           const prediction = await classifyImage(url, imageClassifyModel)
+          setLabel(prediction[0]?.className.split(', ')[0].trim().toLowerCase())
           if (prediction) {
             const translatedLanguage = await AsyncStorage.getItem('language')
             console.log(translatedLanguage)
@@ -46,7 +48,7 @@ const useClassification = (url) => {
               setResult(prediction[0]?.className.split(', ')[0].trim().toLowerCase())
             }
             else {
-              const translatedWord = await getTranslation(prediction[0]?.className.split(', ')[0].trim(), translatedLanguage)
+              const translatedWord = await getTranslation(prediction[0]?.className.split(', ')[0].trim().toLowerCase(), translatedLanguage)
               setResult(translatedWord.trim().toLowerCase())
             }
           }
@@ -59,6 +61,6 @@ const useClassification = (url) => {
       performClassification()
   },[])
 
-  return {isTfReady, result, isLoading}
+  return {isTfReady, result, isLoading, label}
 }
 export default useClassification;
