@@ -39,14 +39,15 @@ const useClassification = (url) => {
           setIsLoading(true)
           const imageClassifyModel = await prepare()
           const prediction = await classifyImage(url, imageClassifyModel)
+          const label = prediction[0]?.className.split(', ')[0].trim().toLowerCase();
           if (prediction) {
             const translatedLanguage = await AsyncStorage.getItem('language')
             console.log(translatedLanguage)
             if (translatedLanguage === 'en') {
-              setResult(prediction[0]?.className.split(', ')[0].trim().toLowerCase())
+              setResult(label);
             }
             else {
-              const translatedWord = await getTranslation(prediction[0]?.className.split(', ')[0].trim(), translatedLanguage)
+              const translatedWord = await getTranslation(label, translatedLanguage)
               setResult(translatedWord.trim().toLowerCase())
             }
           }
@@ -59,6 +60,6 @@ const useClassification = (url) => {
       performClassification()
   },[])
 
-  return {isTfReady, result, isLoading}
+  return {isTfReady, label, result, isLoading}
 }
 export default useClassification;

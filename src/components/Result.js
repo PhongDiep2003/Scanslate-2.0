@@ -11,7 +11,7 @@ function Result({route, navigation}) {
   const insets = useSafeAreaInsets()
   const {url} = route.params
   const [existingFlashCard, setExistingFlashCard] = useState(null)
-  const {isLoading, result} = useClassification(url)
+  const {isLoading, result, label} = useClassification(url)
   const [modalForDuplicateResult, setModalForDuplicateResult] = useState(false)
   const userFlashCardRef = ref(db, 'users/' + auth.currentUser.uid + '/flashcards')
 
@@ -119,7 +119,7 @@ function Result({route, navigation}) {
                       <StatusBar barStyle="light-content" animated />
                       {url && <Image source={{uri: url}} style={styles.image} resizeMode='cover'/>}
                       <View style={styles.predictionView}>
-                        <Text style={styles.predictedResult}>{result}</Text>
+                        <Text style={styles.predictedResult}>{label} : {result}</Text>
                       </View>
                       <Button mode='contained' onPress={navigateToHomePage} buttonColor={'black'} textColor={colors.active_tab} labelStyle={styles.finish}>Finish</Button>
                       <Modal 
