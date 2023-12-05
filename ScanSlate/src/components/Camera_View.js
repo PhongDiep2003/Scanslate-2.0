@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   settingIconContainer: {
     backgroundColor: colors.bottom_tab,
     padding: 5,
-    borderRadius:'100%',
+    borderRadius:100,
     position:'absolute',
     right: 0,
     top:0

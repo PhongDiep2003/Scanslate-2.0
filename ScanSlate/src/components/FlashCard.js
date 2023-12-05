@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, Image, Text, Pressable} from 'react-native';
+import { View, StyleSheet, Dimensions, Image, Text, Pressable, Platform} from 'react-native';
 import { colors } from '../../base';
 const { width, height } = Dimensions.get('window');
 import { Feather } from '@expo/vector-icons';
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: colors.flashCard, // Adjust the background color as needed
     alignItems: 'center',
-    paddingTop: 50,
+    paddingTop: Platform.OS === 'ios' ? 50 : 70,
     shadowColor: 'grey',
     shadowOffset: {
       width: 0,
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     borderColor: '#000',
     borderWidth:1,
     height: height - 110
+
   },
   cardImage: {
     width: '100%',
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
   deleteIconContainer: {
     backgroundColor: '#FC7878',
     padding: 5,
-    borderRadius:'100%',
+    borderRadius:100,
     position:'absolute',
     top: 0,              // Align to the top of the container
     right: 0,            // Align to the right of the container

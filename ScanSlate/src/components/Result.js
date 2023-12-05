@@ -125,7 +125,7 @@ function Result({route, navigation}) {
                       <Modal 
                               visible={modalForDuplicateResult} 
                               title={`"${result}" is already in your deck`}
-                              content={`Click "Ok" to replace image or "No" to shut down the modal`}
+                              content={`Click "Ok" to replace image or "No" to close modal`}
                               ok={modalForDuplicateResultOkBtn}
                               cancel={modalForDuplicateResultCancelBtn}/>
                 </View>

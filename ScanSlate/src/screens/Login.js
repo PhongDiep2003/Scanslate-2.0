@@ -135,7 +135,8 @@ function Login({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.primary
+    backgroundColor: colors.primary,
+    paddingTop: Platform.OS === 'android' ? 70 : 0,
   },
   keyboardAvoidingView: {
     width:'100%', 
