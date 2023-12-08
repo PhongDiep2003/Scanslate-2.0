@@ -1,3 +1,7 @@
+/*
+  This file creates a camera page for the application that allows users to take picture
+*/
+
 import React from 'react';
 import {View, StyleSheet, Pressable, Dimensions, Platform, Linking, StatusBar, TouchableOpacity} from 'react-native';
 import { Button } from 'react-native-paper';
@@ -18,7 +22,7 @@ const CAM_PREVIEW_WIDTH = Dimensions.get('window').width;
 const CAM_PREVIEW_HEIGHT = CAM_PREVIEW_WIDTH / (IS_IOS ? 9 / 16 : 3 / 4);
 
 
-//a function that open the setting app in mobile device
+//this function will automatically open the setting page in the users' phone to let them enable camera permission
 async function openSettings() {
   try {
     await Linking.openSettings();
@@ -30,20 +34,21 @@ async function openSettings() {
   }
 }
 
-
+// main file
 function Camera_View({image, setImage, navigation}) {
   // get the current insets (or padding values) needed to avoid the system UI
   const insets = useSafeAreaInsets()
-  //declare a variable that represent the permission to accesscamera
+  //declare a variable that represent the permission to access camera
   const [permission, requestPermission] = Camera.useCameraPermissions()
   const cameraRef = useRef(null);
-  //a function that will be called automatically when the page just finished loading components
+  //a function that will be called automatically when the page just finished rendering components
   useEffect(() => {
+    //if users have not granted any permission for accessing camera, request it
     if (!permission || !permission?.granted) {
       requestPermission()
     }
   },[])
-  // a function that will handle when users take the picture
+  // a function that will be invoked after taking picture 
   const takePicture = async () => {
     try {
       if (cameraRef && cameraRef?.current) {
@@ -59,7 +64,7 @@ function Camera_View({image, setImage, navigation}) {
     }
   }
 
-  // if hasCameraPermission is true => display camera
+  // if hasCameraPermission is true => display camera vire
   // if hasCameraPermission is false => display a separated UI that requires user to grant camera permission
   return (
           permission && permission.granted ? 

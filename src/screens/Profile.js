@@ -1,10 +1,13 @@
+/*
+  This file creates the UI for profile page
+*/
 import React from 'react';
 import { View, StyleSheet, Dimensions, Text} from 'react-native';
 import { colors } from '../../base';
 import { auth } from '../../backend/firebase';
 
 function Profile() {
-  // later we will replace all text in the below fields with the actual email and password from payload 
+  //use auth property provided by firebase to get access to currentUser object to get their email
   const email = auth.currentUser.email
   const password = '************' 
   return (

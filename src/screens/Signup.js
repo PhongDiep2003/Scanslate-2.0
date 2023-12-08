@@ -1,3 +1,6 @@
+/*
+  This function creates the UI for the Signup page
+*/
 import React, {useState} from 'react';
 import { SafeAreaView, StyleSheet, Image, Pressable, View, ScrollView, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
 import Logo from '../../images/ScanSlateLogo.png'
@@ -9,15 +12,23 @@ import {createUserWithEmailAndPassword} from 'firebase/auth'
 import {getDatabase, ref, set} from 'firebase/database'
 
 function Signup({navigation}) {
+  //a variable that stores the input for userName
   const [userName, setUserName] = useState('')
+  //a variable that stores the input for password
   const [password, setPassword] = useState('')
+  //a variable that stores the input for confirmPassword
   const [confirmPassword, setConfirmPassword] = useState('')
+  //a variable that stores the state of password visibility of password
   const [passwordVisibility1, setPasswordVisibility1] = useState(true)
+  //a variable that stores the state of password visibility of confirmPassword
   const [passwordVisibility2, setPasswordVisibility2] = useState(true)
+  //a variable that used to toggle the expandable list UI 
   const [expanded, setExpanded] = React.useState(false);
+  //a variable that stores the selected language
   const [selectedLanguage, setSelectedLanguage] = useState('Select your language')
+  //a function that toggles the expandable list UI
   const handleExpandingList = () => setExpanded(!expanded);
-
+  // this function adds new user to the database
   const addUserToDatabase = async(userId) => {
     try {
       const db = getDatabase();
@@ -28,7 +39,7 @@ function Signup({navigation}) {
       console.log(error)
     }
   }
-  // ultilize firebase authentication to perform login and sign up
+  // this function performs signup submission after the signup button is pressed 
   const handleSignup = async () => {
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     try {
@@ -45,14 +56,16 @@ function Signup({navigation}) {
         alert('Please select your preferred language')
         return
       }
-      // create new user
+      // register a new user in firebase authentication 
       const userCredential = await createUserWithEmailAndPassword(auth, userName, password)
       addUserToDatabase(userCredential.user.uid)
       alert('New user is created successfully')
+      //reset the input form 
       setUserName('')
       setPassword('')
       setConfirmPassword('')
       setSelectedLanguage('Select your language')
+      //naviage to login if everything is successful
       navigation.navigate('Log in')
 
     }catch(error) {

@@ -1,3 +1,6 @@
+/*
+  Css for the navigation
+*/
 import { StyleSheet } from "react-native";
 import { colors } from "../../base";
 export const navigation_styles = StyleSheet.create({

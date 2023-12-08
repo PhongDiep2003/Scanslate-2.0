@@ -1,3 +1,6 @@
+/*
+  This file create a function that send the label generated from the classification model to the translation API to get the translated label 
+*/
 import {API_TRANSLATION_KEY} from '@env'
 import axios from 'axios';
 const options = {

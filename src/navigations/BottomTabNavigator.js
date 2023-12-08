@@ -1,3 +1,6 @@
+/*
+  This file initializes the navigation and the UI for bottom tab bar of the applicaiton 
+*/
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ViewFlashCards from '../screens/ViewFlashCards';

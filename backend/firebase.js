@@ -1,4 +1,6 @@
-// Import the functions you need from the SDKs you need
+/*
+   This file sets up the backend for the applicaiton, which specifically initializes the firebase connection for database and authentication as well as exports some useful methods that can be used to interact with firebase 
+*/
 import {API_FIREBASE_KEY} from '@env'
 import { initializeApp } from "firebase/app";
 import { initializeAuth, getReactNativePersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
@@ -6,12 +8,7 @@ import {getDatabase, ref, get, set, push, query, orderByChild, equalTo, update, 
 
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Firebase config
 const firebaseConfig = {
   apiKey: API_FIREBASE_KEY,
   authDomain: "scanslate-c1d3c.firebaseapp.com",
@@ -23,11 +20,11 @@ const firebaseConfig = {
 
 // Initialize Firebase with AsyncStorage for persistence
 const firebase = initializeApp(firebaseConfig);
-// const auth = getAuth()
+// Initialize Firebase Auth
 const auth = initializeAuth(firebase, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage)
 });
-
+// Initialize Firebase RealTime Database
 const db = getDatabase()
 
 export {firebase, auth, db, ref, get, set, push, query , orderByChild, equalTo, update, remove, createUserWithEmailAndPassword, signInWithEmailAndPassword}

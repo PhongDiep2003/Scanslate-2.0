@@ -1,3 +1,6 @@
+/*
+  This file creates the UI for login page 
+*/
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, Image, Pressable, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
 import Logo from '../../images/ScanSlateLogo.png'
@@ -9,10 +12,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 function Login({navigation}) {
+  //a variable that stores the input for userName
   const [userName, setUserName] = useState('')
+  //a variable that stores the input for password
   const [password, setPassword] = useState('')
+  //a variable that stores the state of password visibility
   const [passwordVisibility, setPasswordVisibility] = useState(true)
 
+  //this function saves the user's desired language in the local storage (AsyncStorage) so later it can be used to determine what language users want their label to translate to 
   const saveUserLanguageToStorage = async (userId) => {
     try {
       const userRef = ref(db, 'users/' + userId)
@@ -22,13 +29,11 @@ function Login({navigation}) {
           AsyncStorage.setItem('language', child.val())
         }
       })
-      
-     
     } catch (error) {
       console.log(error)
     }
   }
-
+  //this function handles login submission after users press the login button 
   const handleLogin = async () => {
     try {
       if (userName.length === 0 || password.length === 0) {
@@ -52,7 +57,7 @@ function Login({navigation}) {
       }
     }
   }
-
+  //this function will be invoked after all components finished rendering 
   useEffect(() => {
     // check if user is already signed in or not, direct user to the bottom tab screen right away they did, otherwise make them stay in login 
     const unsubscribe = onAuthStateChanged(auth, (user) => {

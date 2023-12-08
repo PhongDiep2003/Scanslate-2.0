@@ -1,3 +1,6 @@
+/*
+  This file creates the UI for the setting page
+*/
 import React from 'react';
 import { View, StyleSheet, Text, Dimensions, TouchableOpacity} from 'react-native';
 import { colors } from '../../base';
@@ -6,6 +9,7 @@ import { auth } from '../../backend/firebase';
 import {signOut} from 'firebase/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 function Setting({navigation}) {
+  //this function logs out of the current account and deletes everything that is stored in local storage
   const logout = async () => {
     try {
       await signOut(auth)

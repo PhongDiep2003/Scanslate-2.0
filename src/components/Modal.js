@@ -1,7 +1,10 @@
+/*
+  This file creates the UI for the modal that will be popped up to notify users when duplicate flashcards are detected
+*/
 import React from 'react';
-import { View } from 'react-native';
-import { Button, Dialog, Portal, PaperProvider, Text } from 'react-native-paper';
+import { Button, Dialog, Portal, Text } from 'react-native-paper';
 
+//main file
 function Modal({visible,title, content, ok, cancel}) {
   return (
     <Portal>

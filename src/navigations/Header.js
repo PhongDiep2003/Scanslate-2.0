@@ -1,3 +1,6 @@
+/*
+  This file creates a custome header for screens such as Setting, Profile,... in the app's navigation 
+*/
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Appbar } from 'react-native-paper';

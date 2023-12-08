@@ -1,3 +1,6 @@
+/*
+  This is a custome hook that will take a passed url, send it to the classfication model as well as call the getTranslation function to get the final label in the user's desired language
+*/
 import { decodeJpeg } from '@tensorflow/tfjs-react-native';
 import * as FileSystem from 'expo-file-system'
 import {useState, useEffect} from 'react';
@@ -43,10 +46,12 @@ const useClassification = (url) => {
           setLabel(prediction[0]?.className.split(', ')[0].trim().toLowerCase())
           if (prediction) {
             const translatedLanguage = await AsyncStorage.getItem('language')
+            //if user's desired language is english, then no need to send the label to translation API
             if (translatedLanguage === 'en') {
               setResult(label);
             }
             else {
+              //call getTranslation() function to get translation for the label 
               const translatedWord = await getTranslation(prediction[0]?.className.split(', ')[0].trim().toLowerCase(), translatedLanguage)
               setResult(translatedWord.trim().toLowerCase())
             }
@@ -54,6 +59,7 @@ const useClassification = (url) => {
         } catch(error) {
           console.log(error)
         } finally {
+          //remove the loading UI after everything is done
           setIsLoading(false)
         }
       }

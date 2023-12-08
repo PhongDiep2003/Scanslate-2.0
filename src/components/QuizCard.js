@@ -1,32 +1,45 @@
+/*
+  This file creates the UI for quiz card that will be displayed in Quiz page
+*/
 import React, { useState } from 'react';
 import { View, Image, TextInput, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import checkmark from '../../images/checkmarkIcon.png'
 import x from '../../images/xIcon.png'
 import { colors } from '../../base';
 import { auth, update, ref, db } from '../../backend/firebase';
+//main file
 const QuizCard = ({id, imageUrl, onSubmit, totalQuizCount, totalScore, isCorrect, setIsCorrect }) => {
+  //a variable that stores user's answer for the quiz 
   const [userAnswer, setUserAnswer] = useState('');
-  
+  // a function that will be called after user hit the submit button on the quiz 
   const handleSubmit = () => {
     /* Handle submission logic CODE GOES HERE*/
+    //trim all the spaces around the user's answer and convert every characters to lowercase to make sure that the user's answer is in the same case as the actual answer when comparing 
     const {score, isCorrect} = onSubmit(userAnswer.trim().toLowerCase())
+    //set the state of the answer
     setIsCorrect(isCorrect)
+    //reset the user's text input form 
     setUserAnswer('')
+    //update the flashcard's score in the backend
     updateFlashCardScore(score)
   };
-
+  // a function that updates the flashcard's score in the backend
   const updateFlashCardScore = async (score) => {
     try {
+      //get the current user object
       const user = auth.currentUser
+      //use the id from current user object, as well as passed flashcard id to create a ref to the location of updated flashcard in the database
       const flashcardRef = ref(db, 'users/' + user.uid + '/flashcards/' + id)
       const updatedValue = {
         totalQuizCount: totalQuizCount + 1,
         totalScore: totalScore + score,
         correctPercentage: (((totalScore + score) / (totalQuizCount + 1)) * 100).toFixed(2) + '%'
       }
+      //call update() function provided by firebase/database to update flashcard
       update(flashcardRef, updatedValue)
 
-    } catch (error) {
+    } catch (error) { 
+      //log error in the console if something goes wrong 
       console.log(error)
       alert('Update flashcard score failed')
     }

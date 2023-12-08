@@ -1,3 +1,6 @@
+/*
+  This file creates the UI of an entry page before entering quiz mode 
+*/
 import React from 'react';
 import { View, StyleSheet, Text, Button, TouchableOpacity, Image, Pressable} from 'react-native';
 import { colors } from '../../base';

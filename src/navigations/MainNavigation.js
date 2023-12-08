@@ -1,3 +1,6 @@
+/*
+  This file initializes the navigation of the entire application 
+*/
 import { createStackNavigator } from "@react-navigation/stack";
 import Login from "../screens/Login";
 import Signup from "../screens/Signup";

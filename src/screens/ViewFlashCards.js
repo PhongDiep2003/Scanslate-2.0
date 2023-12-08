@@ -1,3 +1,6 @@
+/*
+  This file creates the UI that displays flashcards
+*/
 import React, {useState, useEffect} from 'react';
 import { View, StyleSheet, ScrollView, Pressable, Text, FlatList} from 'react-native';
 import FlashCard from '../components/FlashCard';
@@ -7,17 +10,18 @@ import { AntDesign } from '@expo/vector-icons';
 import { db,get, auth, ref, remove } from '../../backend/firebase';
 
 const ViewFlashCards = ({navigation}) => {
+  // a variable that stores a list of flashcards
   const [flashcards, setFlashcards] = useState([])
   const [refreshing, setRefreshing] = useState(false)
   const insets = useSafeAreaInsets()
   
+  //this function retrieves all the flashcards from the database
   const retrieveFlashcards = async () => {
     try {
       const flashcardsRef = ref(db, 'users/' + auth.currentUser.uid + '/flashcards');
       const flashcards = await get(flashcardsRef) 
       const flashcardArr = []
       if (flashcards.exists()) {
-      // do something here
       flashcards.forEach((child) => {
         const key = child.key
         const {imageUrl,translatedWord, correctPercentage} = child.val()
@@ -39,7 +43,7 @@ const ViewFlashCards = ({navigation}) => {
     }
     
   }
-
+  //this function performs flashcard deletion
   const deleteFlashcard = async (card) => {
     try {
       /* Code to delete flashcard GOES HERE...*/
@@ -54,7 +58,7 @@ const ViewFlashCards = ({navigation}) => {
     }
 
   }
-  
+  //this file will be invoked after all components finished rendering
   useEffect(() => {
     retrieveFlashcards()
   },[navigation])

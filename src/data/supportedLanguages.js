@@ -1,3 +1,6 @@
+/*
+  a list of all supported languages that users can pick to translate their image's label to 
+*/
 export default supportedLanguages = [
   {'language': 'Afrikaans', 'value': 'af'},
   {'language': 'Albanian', 'value': 'sq'},

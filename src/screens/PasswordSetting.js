@@ -1,9 +1,13 @@
+/*
+  This file creates the UI for password setting page
+*/
 import React, {useState} from 'react';
 import { View, StyleSheet, Dimensions, Text, TouchableOpacity, TextInput } from 'react-native';
 import { colors } from '../../base';
 import { auth } from '../../backend/firebase';
 import { updatePassword } from 'firebase/auth';
 function PasswordSetting({navigation}) {
+  //this function updates user's current password to a new password
   const changePassword = async () => {
     if (!newPassword) {
       alert("You haven't entered your new password")
@@ -24,6 +28,7 @@ function PasswordSetting({navigation}) {
       }
     }
   }
+  //a variable that stores input for password
   const [newPassword, setNewPassword] = useState('')
   return (
     <View style={styles.container}>
@@ -37,7 +42,7 @@ function PasswordSetting({navigation}) {
                       onChangeText={(text) => setNewPassword(text)}
                       maxLength={40}/>
        </View>
-       {/* Logout button */}
+       {/* Change Password button */}
       <TouchableOpacity style={styles.changePasswordBtn} onPress={changePassword}>
         <Text style={{fontSize:20, fontWeight:'bold'}}>Change Password</Text>
       </TouchableOpacity>

@@ -1,3 +1,6 @@
+/*
+  This file creates the UI for Quiz page 
+*/
 import React, {useState, useEffect} from 'react';
 import { View, StyleSheet, Text, Pressable, TouchableOpacity, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -6,11 +9,14 @@ import { colors } from '../../base';
 import QuizCard from '../components/QuizCard';
 import { db, get, auth, ref } from '../../backend/firebase';
 function Quiz({navigation}) {
+  //a variable that stores a list of flashcards
   const [flashcards, setFlashcards] = useState([])
+  //a variable that keeps track of the flashcard the user is currently at
   const [index, setIndex] = useState(0)
   const insets = useSafeAreaInsets()
   const [isCorrect, setIsCorrect] = useState('')
 
+  //this function retrieves all users' flashcards
   const retrieveFlashcards = async () => {
     try {
       const flashcardsRef = ref(db, 'users/' + auth.currentUser.uid + '/flashcards');
@@ -35,11 +41,12 @@ function Quiz({navigation}) {
       console.log(error)
     }
   }
-
+  //this function will be invoked after all components finished rendering
   useEffect(() => {
     retrieveFlashcards()
   }, [navigation])
 
+  //this function checks if the user's answer matches with the actual answer of the flashcard and return an object that indicate whether the user's asnwer is correct or not
   const handleSubmit = (answer) => {
     /*Code for handling submission GOES HERE... */
     if (answer === flashcards[index]?.title) {
@@ -53,17 +60,21 @@ function Quiz({navigation}) {
       score: 0
     }
   }
-
+  //this function goes back to the previous quiz card
   const backButton = () => {
+    //can't go back if on first flashcard
     if (index > 0) {
       setIndex(prev => prev - 1) 
+      //clear prior answer of previous flashcard before moving to other flashcards
       setIsCorrect('')
     }
   }
-
+  //this function goes to the next quiz card
   const forwardButton = () => {
+    //can't go next if on last flashcard
     if (index < flashcards.length - 1) {
       setIndex(prev => prev + 1)
+      //clear prior answer of previous flashcard before moving to other flashcards
       setIsCorrect('')
     }
   }

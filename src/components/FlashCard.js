@@ -1,11 +1,14 @@
+/*
+  This file creates the UI for flashcard that will be displayed in ViewFlashCards screen
+*/
 import React from 'react';
 import { View, StyleSheet, Dimensions, Image, Text, Pressable, Platform} from 'react-native';
 import { colors } from '../../base';
 const { width, height } = Dimensions.get('window');
 import { Feather } from '@expo/vector-icons';
 
+//main file 
 const FlashCard = ({ id, imageUrl, title, onDelete, correctPercentage}) => {
-
   return(
     <View style={styles.card}>
       <Image
