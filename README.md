@@ -33,4 +33,6 @@ A mobile app developed for the CMPE 133 group project. allows users to capture a
   10. After running the command, you should be able to see the QR code in the terminal
   11. Scan the QR code with your phone's camera, then click on the link that shows in your camera view while scanning the QR code
   12. If all of the instructions are followed correctly, it should automatically send you to "Expo Go" and launch the application from there. The application can then be used and tested.
+## Project Demo Video
+  https://youtu.be/_nH4vMwoBMY
  
